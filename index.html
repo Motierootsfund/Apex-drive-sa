@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#08131e" />
+    <meta name="description" content="Apex Drive SA — a 3D driving and parking sandbox featuring a 100-car garage." />
+    <title>Apex Drive SA — 3D Driving Simulator</title>
+  </head>
+  <body>
+    <div id="game-root">
+      <canvas id="game-canvas" aria-label="3D driving game viewport"></canvas>
+
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark"><span class="brand-mark-cut"></span></div>
+          <div>
+            <div class="brand-name">APEX <span>DRIVE</span></div>
+            <div class="brand-sub">SOUTH AFRICA · DRIVING SIM</div>
+          </div>
+        </div>
+        <div class="topbar-center"><span class="live-dot"></span><span id="world-status">WORLD ONLINE</span><span class="topbar-divider"></span><span>FREE ROAM</span></div>
+        <div class="topbar-actions">
+          <div class="weather-chip"><span class="sun-icon">☀</span><span>20°C</span><span class="weather-divider"></span><span>DAY</span></div>
+          <button id="camera-btn" class="icon-btn" title="Change camera (C)"><span>◉</span><small>CAM</small></button>
+          <button id="pause-btn" class="icon-btn" title="Pause (P)"><span>Ⅱ</span><small>PAUSE</small></button>
+        </div>
+      </header>
+
+      <aside class="panel garage-panel" id="garage-panel">
+        <div class="panel-heading">
+          <div><div class="eyebrow">YOUR COLLECTION</div><h1>GARAGE <span class="count-pill">100</span></h1></div>
+          <button id="garage-collapse" class="collapse-btn" aria-label="Collapse garage">‹</button>
+        </div>
+        <div class="garage-selected">
+          <div class="selected-accent"></div>
+          <div class="selected-label">SELECTED VEHICLE</div>
+          <div id="selected-name" class="selected-name">Volkswagen Golf 8 GTI</div>
+          <div class="selected-meta"><span id="selected-year">2024</span><span class="meta-dot">·</span><span id="selected-type">HOT HATCH</span><span class="meta-dot">·</span><span id="selected-drive">FWD</span></div>
+          <div class="selected-stats">
+            <div><strong id="selected-speed">250</strong><span>KM/H TOP SPEED</span></div>
+            <div><strong id="selected-power">180</strong><span>KW EST. POWER</span></div>
+            <div><strong id="selected-zero">6.4</strong><span>0–100 SEC</span></div>
+          </div>
+        </div>
+        <div class="garage-tools">
+          <label class="search-wrap"><span>⌕</span><input id="car-search" type="search" placeholder="Search 100 vehicles..." autocomplete="off" /></label>
+          <select id="brand-filter" aria-label="Filter cars by brand">
+            <option value="all">All manufacturers</option>
+          </select>
+          <div class="list-caption"><span>VEHICLE LINE-UP</span><span id="visible-count">100 MODELS</span></div>
+        </div>
+        <div id="car-list" class="car-list" role="listbox" aria-label="Vehicle garage"></div>
+        <div class="garage-footer"><span class="garage-footer-dot"></span><span>MORE RIDES CAN BE ADDED IN <code>src/cars.js</code></span></div>
+      </aside>
+
+      <button id="garage-open" class="garage-open-btn" aria-label="Open garage"><span>▦</span> GARAGE <b>100</b></button>
+
+      <section class="mission-panel panel">
+        <div class="mission-top"><div><div class="eyebrow">DRIVING EXPERIENCE</div><h2 id="mode-title">FREE DRIVE</h2></div><div id="mission-state" class="state-chip"><span></span> READY</div></div>
+        <div class="mode-switch"><button id="free-mode" class="mode-btn active">FREE ROAM</button><button id="parking-mode" class="mode-btn">PARKING TEST <span class="new-dot">NEW</span></button></div>
+        <div class="mission-content">
+          <div class="target-icon"><span>⌖</span></div>
+          <div class="mission-copy"><strong id="mission-name">Explore the training grounds</strong><p id="mission-desc">Take your car for a spin. Find your line, test the handling and make yourself at home.</p></div>
+        </div>
+        <div class="mission-metrics"><div><span>OBJECTIVE</span><strong id="objective-value">OPEN WORLD</strong></div><div><span>DISTANCE</span><strong id="distance-value">—</strong></div></div>
+        <button id="mission-btn" class="primary-btn"><span>▶</span> START PARKING TEST</button>
+      </section>
+
+      <section class="telemetry-panel panel">
+        <div class="telemetry-top"><span class="eyebrow">LIVE TELEMETRY</span><span id="drive-status" class="drive-status">ENGINE ON</span></div>
+        <div class="speed-row"><div class="speed-gauge"><div class="gauge-inner"><strong id="speed-value">0</strong><span>KM/H</span></div><div class="gauge-tick tick-one"></div><div class="gauge-tick tick-two"></div><div class="gauge-tick tick-three"></div></div><div class="gear-block"><span>GEAR</span><strong id="gear-value">N</strong><div class="gear-label" id="gear-label">IDLE</div></div></div>
+        <div class="rpm-row"><div class="rpm-head"><span>ENGINE RPM</span><strong id="rpm-value">850</strong></div><div class="rpm-track"><span id="rpm-bar"></span></div></div>
+        <div class="telemetry-divider"></div>
+        <div class="telemetry-bottom"><div><span>STEERING</span><strong id="steer-value">0°</strong></div><div><span>SESSION</span><strong id="session-time">00:00</strong></div><div><span>BEST PARK</span><strong id="best-park">—</strong></div></div>
+      </section>
+
+      <div class="crosshair-hint"><span class="hint-key">C</span> CAMERA <span class="hint-line"></span><span class="hint-key">R</span> RESET <span class="hint-line"></span><span class="hint-key">P</span> PAUSE</div>
+      <div id="toast" class="toast" role="status" aria-live="polite"><span class="toast-mark">✓</span><span id="toast-message">Welcome to Apex Drive SA</span></div>
+      <div id="paused-overlay" class="paused-overlay"><div class="paused-card"><div class="eyebrow">SESSION ON HOLD</div><h2>PAUSED<span>.</span></h2><p>Your drive is waiting right where you left it.</p><button id="resume-btn" class="primary-btn">▶ RESUME DRIVE</button><span class="paused-small">PRESS P TO CONTINUE</span></div></div>
+      <div id="loading-screen" class="loading-screen"><div class="loading-logo"><div class="brand-mark big"><span class="brand-mark-cut"></span></div><div class="brand-name">APEX <span>DRIVE</span></div></div><div class="loading-track"><span id="loading-progress"></span></div><div id="loading-label">BUILDING YOUR WORLD...</div></div>
+
+      <div class="mobile-controls" aria-label="Touch driving controls">
+        <div class="mobile-steer"><button data-hold="ArrowLeft" aria-label="Steer left">‹</button><button data-hold="ArrowRight" aria-label="Steer right">›</button></div>
+        <div class="mobile-pedals"><button data-hold="KeyS" class="pedal brake-pedal">BRAKE<br /><strong>▼</strong></button><button data-hold="KeyW" class="pedal gas-pedal">ACCEL<br /><strong>▲</strong></button></div>
+      </div>
+      <div class="bottom-brand"><span>APEX DRIVE SA</span><span class="bottom-sep">/</span><span>BUILD 01.00</span><span class="bottom-sep">/</span><span>THREE.JS</span></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
